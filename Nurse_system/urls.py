@@ -23,6 +23,7 @@ def home_redirect(request):
     return redirect('login')
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('list_patients/', include('coupon.urls')),
     path('', home_redirect, name = 'home'),
     path('login/', views.login_view, name = 'login'),
 ]
