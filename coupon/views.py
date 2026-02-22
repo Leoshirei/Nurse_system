@@ -35,3 +35,9 @@ def create_patient(request):
     else:
         form = PatientsForm()
     return render(request, 'coupon/create_patient.html', {'form': form})
+
+@login_required
+def delete_patient(request, id):
+    patient = get_object_or_404(Patient, id = id, owner = request.user)
+    patient.delete()
+    return redirect('list_patients')

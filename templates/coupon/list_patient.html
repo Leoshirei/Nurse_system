@@ -9,6 +9,7 @@
     <hr>
     {% for patient in patients %}
         {{ patient.name }} {{ patient.surname}} <br>
+        <a href = "{% url 'delete_patient' patient.id %}"><button>Usuń pacjenta</button></a>
         <hr>
     {% endfor %}
 </body>
