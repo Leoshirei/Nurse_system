@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <a href = "{% url 'create_patient' %}"><button>Dodaj pacjenta</button></a>
+    <hr>
+    {% for patient in patients %}
+        {{ patient.name }} {{ patient.surname}} <br>
+        <hr>
+    {% endfor %}
+</body>
+</html>

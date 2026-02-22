@@ -3,7 +3,7 @@ from django.contrib.auth.password_validation import password_changed
 from django.db import models
 
 # Create your models here.
-class Pacient(models.Model):
+class Patient(models.Model):
     name = models.CharField(max_length = 50)
     surname = models.CharField(max_length = 50)
     pesel = models.CharField(max_length = 11)
