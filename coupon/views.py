@@ -41,3 +41,8 @@ def delete_patient(request, id):
     patient = get_object_or_404(Patient, id = id, owner = request.user)
     patient.delete()
     return redirect('list_patients')
+
+@login_required
+def detail_patient(request, id):
+    patient = get_object_or_404(Patient, id = id, owner = request.user)
+    return render(request, 'coupon/detail_patient.html', {'patient': patient})

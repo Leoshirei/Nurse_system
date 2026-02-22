@@ -8,7 +8,7 @@
     <a href = "{% url 'create_patient' %}"><button>Dodaj pacjenta</button></a>
     <hr>
     {% for patient in patients %}
-        {{ patient.name }} {{ patient.surname}} <br>
+        <a href = "{% url 'detail_patient' patient.id %}">  {{ patient.name }} {{ patient.surname}} </a><br>
         <a href = "{% url 'delete_patient' patient.id %}"><button>Usuń pacjenta</button></a>
         <hr>
     {% endfor %}
