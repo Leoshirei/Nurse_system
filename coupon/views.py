@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .models import Patient
+from .models import Patient, Medical_Task
 from .forms import PatientsForm
 
 
@@ -45,4 +45,10 @@ def delete_patient(request, id):
 @login_required
 def detail_patient(request, id):
     patient = get_object_or_404(Patient, id = id, owner = request.user)
-    return render(request, 'coupon/detail_patient.html', {'patient': patient})
+    medical_tasks = Medical_Task.objects.filter(owner = patient.id)
+    return render(request, 'coupon/detail_patient.html', {'patient': patient, 'medical_tasks': medical_tasks})
+
+@login_required
+def add_table(request, id):
+    patient = get_object_or_404(Patient, id = id, owner = request.user)
+    return render(request, 'coupon/add_label.html', {'patient': patient})
