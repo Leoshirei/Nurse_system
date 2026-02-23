@@ -26,4 +26,6 @@ urlpatterns = [
     path('list_patients/', include('coupon.urls')),
     path('', home_redirect, name = 'home'),
     path('login/', views.login_view, name = 'login'),
+    path('add_nurse/', views.create_nurse, name = 'create_nurse'),
+    path('menu_manager/', views.menu_manager, name = 'menu_manager'),
 ]

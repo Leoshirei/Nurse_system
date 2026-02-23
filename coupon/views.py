@@ -1,20 +1,24 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.models import User
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login, logout
-from .models import Patient, Medical_Task, Task_Status, Habit_Table
-from .forms import PatientsForm
+from .models import Patient, Medical_Task, Task_Status, Habit_Table, Profiles, Facilities
+from .forms import PatientsForm, NurseForm
 import datetime, calendar
 
 
-# Create your views here.
+# Operate at users and patients
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data = request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('list_patients')
+            if request.user.profile.role == "manager":
+                return redirect('menu_manager')
+            else:
+                return redirect('list_patients')
     else:
         form = AuthenticationForm()
     return render(request, 'coupon/login.html', {'form': form})
@@ -127,3 +131,25 @@ def show_table(request, patient_id, month, year):
         "year": year,
         "status_dict": status_dict,}
         )
+# Operate managers
+def create_nurse(request):
+    if request.method == 'POST':
+        form = NurseForm(request.POST)
+        if form.is_valid():
+            nurse_user = form.save()
+            manager_profile = Profiles.objects.get(user=request.user)
+            Profiles.objects.create(
+                user = nurse_user,
+                facility = manager_profile.facility,
+                role = 'nurse'
+            )
+            return redirect('menu_manager')
+    else:
+        form = NurseForm()
+    return render(request, 'coupon/add_nurse.html', {'form': form})
+
+def menu_manager(request):
+    manager_menu = Profiles.objects.get(user=request.user)
+    users = Profiles.objects.filter(facility=manager_menu.facility, role="nurse")
+    print("NURSES:", users)
+    return render(request, 'coupon/menu_manager.html', {'users': users})

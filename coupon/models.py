@@ -2,7 +2,24 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import password_changed
 from django.db import models
 
-# Create your models here.
+# Models for managers and facilities
+class Facilities(models.Model):
+    name = models.CharField(max_length = 100)
+    def __str__(self):
+        return self.name
+
+class Profiles(models.Model):
+    ROLE_CHOICES = (
+    ("nurse", "Nurse"),
+    ("manager", "Manager"),
+    )
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name = 'profile')
+    facility = models.ForeignKey(Facilities, on_delete=models.CASCADE)
+    role = models.CharField(max_length = 10, choices=ROLE_CHOICES)
+    def __str__(self):
+        return f"{self.user.username} - {self.role}"
+
+# Models for table
 class Patient(models.Model):
     name = models.CharField(max_length = 50)
     surname = models.CharField(max_length = 50)
@@ -26,4 +43,6 @@ class Task_Status(models.Model):
     habit = models.ForeignKey(Medical_Task, on_delete=models.CASCADE)
     date = models.DateField()
     done = models.BooleanField(default=False)
+
+
 

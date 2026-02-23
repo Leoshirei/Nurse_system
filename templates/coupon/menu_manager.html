@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <a href = "{% url 'create_nurse' %}">Dodaj pielęgniarke</a><br>
+    <hr>
+    {% for profile in users %}
+        {{ profile.user.first_name }} {{ profile.user.last_name }} {{ profile.user.username }} <br>
+        <hr>
+    {% endfor %}
+</body>
+</html>
