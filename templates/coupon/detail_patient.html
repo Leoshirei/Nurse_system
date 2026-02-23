@@ -6,7 +6,12 @@
 </head>
 <body>
     {{ patient.name }} {{ patient.surname }} <br>
-    <a href = "{% url 'add_table' patient.id %}">Dodaj kupon</a>
+    <a href = "{% url 'add_table' patient.id %}">Dodaj kupon</a> <br>
+    {% for table in tables %}
+        <a href = "{% url 'show_table' patient.id table.month table.year %}">
+            Miesiąc: {{ table.month }} / {{ table.year }} <br>
+        </a>
+    {% endfor %}
     <hr>
 
 </body>

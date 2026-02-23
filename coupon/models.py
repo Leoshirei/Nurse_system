@@ -13,6 +13,17 @@ class Patient(models.Model):
 
 class Medical_Task(models.Model):
     name = models.CharField(max_length = 100)
-    owner = models.ForeignKey(Patient, on_delete = models.CASCADE)
     def __str__(self):
         return self.name
+
+class Habit_Table(models.Model):
+    person = models.ForeignKey(Patient, on_delete = models.CASCADE)
+    month = models.IntegerField()
+    year = models.IntegerField()
+
+class Task_Status(models.Model):
+    table = models.ForeignKey(Habit_Table, on_delete=models.CASCADE)
+    habit = models.ForeignKey(Medical_Task, on_delete=models.CASCADE)
+    date = models.DateField()
+    done = models.BooleanField(default=False)
+

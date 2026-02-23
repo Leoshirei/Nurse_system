@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <title class = "no-print">Title</title>
+    <style>
+
+    #tracker-table td,
+    #tracker-table th {
+        padding: 5px;
+        text-align: center;
+    }
+
+    .highlight {
+        background-color: #2b8a3e; /* mocna zieleń */
+        color: white;
+    }
+    @media print {
+        .no-print {
+            display: none;
+        }
+    }
+    </style>
+</head>
+
+<body>
+    {% load custom_tags %}
+    <form method = 'POST' action = "{% url 'save_table' patient.id month year %}">
+        {% csrf_token %}
+        <table border="1" id = "tracker-table">
+            <tr>
+            <th>Czynność</th>
+            {% for day in days %}
+            <th>{{ day }}</th>
+            {% endfor %}
+            </tr>
+            {% for task in tasks %}
+                <tr>
+                    <td>
+                    {{ task.name }}
+                    </td>
+                    {% for day in days %}
+                    <td class = "cell">
+                        <input type = "checkbox", name = "task_{{ task.id }}_{{ day }}"
+                           {% if status_dict|get_item:task.id|get_item:day %}
+                            checked
+                           {% endif %}
+                        >
+                    </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+        <button type = "submit" class="no-print">Zapisz</button>
+    </form>
+    <button onclick="window.print()" class="no-print">🖨️ Drukuj</button>
+
+    <script>
+    const table = document.getElementById("tracker-table");
+    const cells = table.getElementsByClassName("cell");
+    for (let cell of cells) {
+        cell.addEventListener("mouseenter", function () {
+            const row = this.parentElement;
+            const colIndex = this.cellIndex;
+            // highlight row
+            for (let td of row.children) {
+                td.classList.add("highlight");
+            }
+            // highlight column
+            for (let tr of table.rows) {
+                if (tr.children[colIndex]) {
+                    tr.children[colIndex].classList.add("highlight");
+                }
+            }
+        });
+        cell.addEventListener("mouseleave", function () {
+            const highlighted = table.querySelectorAll(".highlight");
+            highlighted.forEach(el => el.classList.remove("highlight"));
+        });
+    }
+</script>
+</body>
+</html>
